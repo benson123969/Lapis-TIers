@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Splyxtiers - Minecraft PvP Tierlist</title>
+
+<style>
+:root {
+ --bg: #0b1220;
+ --panel: #020617;
+ --soft: #111827;
+ --gold: #facc15;
+ --text: #e5e7eb;
+}
+
+* {
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+}
+
+body {
+ margin: 0;
+ font-family: 'Inter', Arial, sans-serif;
+ color: var(--text);
+ background: linear-gradient(180deg, 
+   #87CEEB 0%,
+   #87CEEB 20%,
+   #FFD700 40%,
+   #FFA500 55%,
+   #FF4500 75%,
+   #DC143C 90%
+ );
+ background-size: 100% 200%;
+ animation: sonnenuntergang 15s ease infinite;
+ overflow-x: hidden;
+ min-height: 100vh;
+}
+
+body::before {
+ content: "";
+ position: fixed;
+ inset: 0;
+ background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Clouds_over_the_Atlantic_Ocean.jpg/800px-Clouds_over_the_Atlantic_Ocean.jpg');
+ background-blend-mode: overlay;
+ background-size: cover;
+ opacity: 0.4;
+ animation: wolkenSchweben 60s linear infinite;
+ pointer-events: none;
+ z-index: 1;
+}
+
+body::after {
+ content: "";
+ position: fixed;
+ top: 15%;
+ right: 10%;
+ width: 250px;
+ height: 250px;
+ background: radial-gradient(circle, 
+   rgba(255, 215, 0, 0.95) 0%, 
+   rgba(255, 140, 0, 0.7) 50%, 
+   rgba(255, 69, 0, 0.3) 80%, 
+   transparent 100%
+ );
+ border-radius: 50%;
+ filter: blur(35px);
+ animation: sonneLeuchten 10s ease-in-out infinite;
+ pointer-events: none;
+ z-index: 1;
+}
+
+@keyframes sonnenuntergang {
+ 0%, 100% { background-position: 0% 0%; }
+ 50% { background-position: 0% 50%; }
+}
+
+@keyframes wolkenSchweben {
+ 0% { background-position: 0% 0%; }
+ 100% { background-position: 30% 10%; }
+}
+
+@keyframes sonneLeuchten {
+ 0%, 100% { transform: scale(1); opacity: 0.8; filter: blur(35px); }
+ 50% { transform: scale(1.3); opacity: 1; filter: blur(25px); }
+}
+
+.startscreen {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(10,20,40,0.95) 100%);
+ backdrop-filter: blur(20px);
+ z-index: 1000;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ animation: fadeIn 0.8s ease;
+}
+
+.startscreen-content {
+ text-align: center;
+ padding: 40px;
+ background: rgba(255,255,255,0.05);
+ border-radius: 40px;
+ backdrop-filter: blur(10px);
+ border: 1px solid rgba(255,215,0,0.3);
+ animation: float 3s ease-in-out infinite;
+}
+
+.startscreen h1 {
+ font-size: 64px;
+ background: linear-gradient(135deg, #FFD700, #FFA500);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ margin-bottom: 20px;
+ text-shadow: 0 0 30px rgba(255,215,0,0.5);
+}
+
+.startscreen p {
+ font-size: 18px;
+ color: #ccc;
+ margin-bottom: 40px;
+ letter-spacing: 1px;
+}
+
+.get-started-btn {
+ padding: 16px 48px;
+ font-size: 24px;
+ font-weight: bold;
+ background: linear-gradient(135deg, #FFD700, #FFA500);
+ border: none;
+ border-radius: 60px;
+ color: #000;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ box-shadow: 0 0 30px rgba(255,215,0,0.5);
+ animation: pulse 2s infinite;
+}
+
+.get-started-btn:hover {
+ transform: scale(1.1);
+ box-shadow: 0 0 50px rgba(255,215,0,0.8);
+}
+
+@keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+}
+
+@keyframes float {
+ 0%, 100% { transform: translateY(0px); }
+ 50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse {
+ 0%, 100% { transform: scale(1); }
+ 50% { transform: scale(1.05); }
+}
+
+.main-content {
+ display: none;
+ opacity: 0;
+ transition: opacity 0.5s ease;
+}
+
+.main-content.show {
+ display: block;
+ opacity: 1;
+}
+
+header, .tabs, .container {
+ position: relative;
+ z-index: 20;
+}
+
+header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 14px 22px;
+ background: rgba(2,6,23,0.7);
+ backdrop-filter: blur(10px);
+ border-bottom: 2px solid rgba(255,215,0,0.3);
+}
+
+.logo {
+ font-size: 22px;
+ font-weight: 900;
+ background: linear-gradient(90deg,#22c55e,#facc15);
+ -webkit-background-clip: text;
+ color: transparent;
+}
+
+.tabs {
+ display: flex;
+ gap: 10px;
+ justify-content: center;
+ padding: 16px;
+ flex-wrap: wrap;
+}
+
+.tabs button {
+ padding: 10px 16px;
+ border-radius: 999px;
+ border: none;
+ background: rgba(17,24,39,0.8);
+ backdrop-filter: blur(5px);
+ color: #fff;
+ font-weight: 800;
+ cursor: pointer;
+ border: 1px solid rgba(255,255,255,0.2);
+ transition: all 0.3s ease;
+}
+
+.tabs button.active,
+.tabs button:hover {
+ background: #ffd700;
+ color: #000;
+ border-color: #ffd700;
+ box-shadow: 0 0 25px #ffd700;
+ transform: translateY(-2px);
+}
+
+.container {
+ max-width: 1200px;
+ margin: auto;
+ padding: 0 16px 160px;
+}
+
+.row {
+ display: flex;
+ align-items: center;
+ gap: 14px;
+ padding: 14px 18px;
+ border-radius: 18px;
+ background: rgba(2,6,23,0.75);
+ backdrop-filter: blur(12px);
+ margin-bottom: 10px;
+ cursor: pointer;
+ transition: all 0.35s ease;
+ border: 2px solid transparent;
+ animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+ from {
+   opacity: 0;
+   transform: translateY(20px);
+ }
+ to {
+   opacity: 1;
+   transform: translateY(0);
+ }
+}
+
+.row:hover {
+ transform: translateY(-6px) scale(1.02);
+ box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+.row.top1 {
+ background: rgba(0, 0, 0, 0.65) !important;
+ border: 4px solid #FFD700 !important;
+ box-shadow: 0 0 70px #FFD700, 0 0 35px rgba(255, 215, 0, 0.7) inset;
+ animation: glowGold 2s ease-in-out infinite;
+}
+
+.row.top2 {
+ background: rgba(0, 0, 0, 0.65) !important;
+ border: 4px solid #E8E8E8 !important;
+ box-shadow: 0 0 70px #FFFFFF, 0 0 35px rgba(255, 255, 255, 0.6) inset;
+ animation: glowSilver 2s ease-in-out infinite;
+}
+
+.row.top3 {
+ background: rgba(0, 0, 0, 0.65) !important;
+ border: 4px solid #CD7F32 !important;
+ box-shadow: 0 0 70px #CD7F32, 0 0 35px rgba(205, 127, 50, 0.6) inset;
+ animation: glowBronze 2s ease-in-out infinite;
+}
+
+.row:not(.top1):not(.top2):not(.top3) {
+ background: rgba(10, 12, 18, 0.92) !important;
+ backdrop-filter: blur(12px);
+ border: 1px solid rgba(255,255,255,0.25);
+ box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+ transition: all 0.3s ease;
+}
+
+.row:not(.top1):not(.top2):not(.top3):hover {
+ border-color: rgba(255,215,0,0.5);
+ box-shadow: 0 0 30px rgba(255,215,0,0.3), 0 10px 25px rgba(0,0,0,0.4);
+ transform: translateY(-6px) scale(1.02);
+}
+
+@keyframes glowGold {
+ 0%, 100% { box-shadow: 0 0 50px #FFD700, 0 0 25px rgba(255,215,0,0.6) inset; }
+ 50% { box-shadow: 0 0 90px #FFD700, 0 0 45px rgba(255,215,0,0.9) inset; }
+}
+
+@keyframes glowSilver {
+ 0%, 100% { box-shadow: 0 0 50px #FFFFFF, 0 0 25px rgba(255,255,255,0.5) inset; }
+ 50% { box-shadow: 0 0 80px #FFFFFF, 0 0 40px rgba(255,255,255,0.7) inset; }
+}
+
+@keyframes glowBronze {
+ 0%, 100% { box-shadow: 0 0 50px #CD7F32, 0 0 25px rgba(205,127,50,0.5) inset; }
+ 50% { box-shadow: 0 0 80px #CD7F32, 0 0 40px rgba(205,127,50,0.7) inset; }
+}
+
+.rank {
+ width: 34px;
+ font-weight: 900;
+ color: white;
+ text-shadow: 0 0 10px rgba(255,255,255,0.8);
+ font-size: 18px;
+}
+
+.head {
+ width: 42px;
+ height: 42px;
+ border-radius: 10px;
+ border: 2px solid rgba(255,255,255,0.3);
+ transition: 0.2s;
+}
+
+.row:hover .head {
+ border-color: #ffd700;
+ transform: scale(1.05);
+}
+
+.name {
+ flex: 1;
+ font-weight: 800;
+ color: white;
+ text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+ font-size: 16px;
+}
+
+.points {
+ font-size: 12px;
+ opacity: 0.9;
+ color: #FFD700;
+ font-weight: bold;
+}
+
+.tiers {
+ display: flex;
+ gap: 8px;
+ flex-wrap: wrap;
+}
+
+.tier {
+ width: 46px;
+ height: 46px;
+ border-radius: 50%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ font-size: 10px;
+ font-weight: 900;
+ transition: all 0.25s ease;
+ border: 2px solid rgba(255,255,255,0.3);
+ background: rgba(0,0,0,0.2);
+ backdrop-filter: blur(2px);
+}
+
+.tier:hover {
+ transform: scale(1.25) rotate(5deg);
+ border-color: #ffd700;
+ box-shadow: 0 0 20px rgba(255,215,0,0.5);
+}
+
+.HT1 { background: #FFD700; color: #000; }
+.LT1 { background: #F0B400; color: #000; }
+.HT2 { background: #E0E0E0; color: #000; }
+.LT2 { background: #B0B0B0; color: #000; }
+.HT3 { background: #D7945A; color: #000; }
+.LT3 { background: #B06E3C; color: #fff; }
+.HT4 { background: #F5F5F5; color: #000; }
+.LT4 { background: #4A4A4A; color: #fff; }
+.HT5 { background: #FF6B6B; color: #000; }
+.LT5 { background: #B22222; color: #fff; }
+
+.modal {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.8);
+ backdrop-filter: blur(15px);
+ z-index: 1000;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+ background: linear-gradient(135deg, #1a1f2e, #0f121f);
+ border-radius: 28px;
+ padding: 24px;
+ max-width: 500px;
+ width: 90%;
+ max-height: 80vh;
+ overflow-y: auto;
+ border: 2px solid rgba(255,215,0,0.5);
+ box-shadow: 0 0 60px rgba(255,215,0,0.3);
+ animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+ from {
+   transform: scale(0.9);
+   opacity: 0;
+ }
+ to {
+   transform: scale(1);
+   opacity: 1;
+ }
+}
+
+.modal-header {
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ margin-bottom: 24px;
+ padding-bottom: 16px;
+ border-bottom: 2px solid rgba(255,215,0,0.3);
+}
+
+.modal-header img {
+ width: 64px;
+ height: 64px;
+ border-radius: 16px;
+ border: 2px solid #ffd700;
+}
+
+.modal-header h2 {
+ font-size: 28px;
+ color: #ffd700;
+}
+
+.close-modal {
+ margin-left: auto;
+ background: rgba(255,255,255,0.1);
+ border: none;
+ color: white;
+ font-size: 28px;
+ cursor: pointer;
+ width: 40px;
+ height: 40px;
+ border-radius: 50%;
+ transition: 0.2s;
+}
+
+.close-modal:hover {
+ background: #ff4444;
+ transform: rotate(90deg);
+}
+
+.modal-tiers {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+ gap: 12px;
+}
+
+.modal-tier-item {
+ background: rgba(0,0,0,0.5);
+ border-radius: 16px;
+ padding: 10px;
+ text-align: center;
+ transition: 0.2s;
+}
+
+.modal-tier-item:hover {
+ transform: scale(1.05);
+ background: rgba(255,215,0,0.2);
+}
+
+.modal-tier-item img {
+ width: 32px;
+ height: 32px;
+ margin-bottom: 8px;
+}
+
+.modal-tier-item .tier-badge {
+ display: inline-block;
+ padding: 4px 12px;
+ border-radius: 20px;
+ font-weight: bold;
+ font-size: 14px;
+ margin-top: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="startscreen" id="startscreen">
+ <div class="startscreen-content">
+   <h1>⚔️ Splyxtiers ⚔️</h1>
+   <p>Stunlam!!!</p>
+   <button class="get-started-btn" id="startBtn">🚀 PVP Grind</button>
+ </div>
+</div>
+
+<div class="main-content" id="mainContent">
+ <header>
+   <div class="logo">Splyxtiers</div>
+ </header>
+
+ <div class="tabs" id="tabs"></div>
+ <div class="container" id="list"></div>
+</div>
+
+<script>
+const icons = {
+ Sword:"https://mctiers.com/tier_icons/sword.svg",
+ Axe:"https://mctiers.com/tier_icons/axe.svg",
+ Mace:"https://mctiers.com/tier_icons/mace.svg",
+ UHC:"https://mctiers.com/tier_icons/uhc.svg",
+ "NethOP":"https://mctiers.com/tier_icons/nethop.svg",
+ Pot:"https://mctiers.com/tier_icons/pot.svg",
+ SMP:"https://mctiers.com/tier_icons/smp.svg",
+ Vanilla:"https://mctiers.com/tier_icons/vanilla.svg",
+ Cart:"https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/74/Minecart_with_TNT_JE2_BE2.png/revision/latest?cb=20191220092620"
+}
+
+const modes = ["Overall", "Sword", "Axe", "Mace", "UHC", "NethOP", "Pot", "SMP", "Vanilla", "Cart"]
+
+const tierPoints = {
+ LT5: 1, HT5: 2,
+ LT4: 3, HT4: 4,
+ LT3: 6, HT3: 10,
+ LT2: 15, HT2: 20,
+ LT1: 30, HT1: 40
+}
+
+let players = [
+ {name:"Splyx7_", tiers:{Sword:"HT3", Axe:"HT3", Mace:"LT3", UHC:"HT3", SMP:"HT3", Vanilla:"LT3"}},
+ {name:"SazeTT", tiers:{Sword:"HT3", Axe:"HT3", Mace:"HT3", UHC:"LT3", SMP:"LT3", Vanilla:"HT3", Cart:"HT3"}},
+ {name:"KrabeTT", tiers:{Sword:"LT3", Axe:"HT3", Mace:"HT4", UHC:"HT4", SMP:"LT3", Vanilla:"LT4", Cart:"HT3"}},
+ {name:"SplyxKokowei", tiers:{Sword:"HT4", Axe:"HT3", Mace:"LT3", UHC:"HT4", SMP:"LT3", Vanilla:"HT4"}},
+ {name:"KartoffelFilip", tiers:{Sword:"LT3", Axe:"HT3", Mace:"HT3", UHC:"HT3", SMP:"LT3", Vanilla:"HT3"}},
+ {name:"KittyKeks2012", tiers:{Sword:"LT4", Axe:"HT5", Mace:"LT5", UHC:"LT4", SMP:"HT5", Vanilla:"LT5"}},
+ {name:"TargedApex", tiers:{Sword:"HT4", Axe:"HT5", Mace:"HT5", UHC:"LT4", SMP:"LT4", Vanilla:"HT4"}},
+ {name:"GurkusTheBird", tiers:{}},
+ {name:"easypeasy1913", tiers:{Sword:"LT4", Axe:"LT4", Mace:"LT5", UHC:"LT4", SMP:"HT5", Vanilla:"LT5"}},
+ {name:"ToxicGooni_Pau9", tiers:{}},
+ {name:"Zen1235232", tiers:{}},
+ {name:"LoesungBrot8084", tiers:{}},
+ {name:"ShadowXNightmare", tiers:{Sword:"LT3", Axe:"LT3", Mace:"LT3", UHC:"LT4", SMP:"LT4", Vanilla:"LT3"}},
+ {name:"koshiki", tiers:{}},
+ {name:"ChaosGame8709", tiers:{}},
+ {name:"RealJMMH", tiers:{}},
+ {name:"CyberBlaze22", tiers:{}},
+ {name:"xXF0cusXx", tiers:{}},
+ {name:"VariedIron", tiers:{}},
+ {name:"Zero_12F", tiers:{}}
+]
+
+let current = "Overall"
+let isInitialized = false
+
+function skin(n) { return "https://mc-heads.net/avatar/" + n + "/64" }
+function points(p) { return Object.values(p.tiers).reduce((s, t) => s + (tierPoints[t] || 0), 0) }
+
+function openPlayerDetail(player) {
+ const modal = document.createElement("div")
+ modal.className = "modal"
+ 
+ let tiersHTML = ""
+ const allModes = ["Sword", "Axe", "Mace", "UHC", "NethOP", "Pot", "SMP", "Vanilla", "Cart"]
+ 
+ allModes.forEach(mode => {
+   const rank = player.tiers[mode] || "❌"
+   const isRank = rank !== "❌"
+   tiersHTML += `
+     <div class="modal-tier-item">
+       <img src="${icons[mode]}" alt="${mode}">
+       <div>${mode}</div>
+       <div class="tier-badge" style="background: ${isRank ? (rank.includes('HT') ? '#FFD700' : '#B06E3C') : '#333'}; color: ${isRank ? '#000' : '#fff'}">
+         ${rank}
+       </div>
+     </div>
+   `
+ })
+ 
+ modal.innerHTML = `
+   <div class="modal-content">
+     <div class="modal-header">
+       <img src="${skin(player.name)}" alt="${player.name}">
+       <h2>${player.name}</h2>
+       <button class="close-modal" onclick="this.closest('.modal').remove()">✕</button>
+     </div>
+     <div class="modal-tiers">
+       ${tiersHTML}
+     </div>
+   </div>
+ `
+ document.body.appendChild(modal)
+ modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove() })
+}
+
+function render() {
+ const list = document.getElementById("list")
+ if (!list) return
+ list.innerHTML = ""
+ players.sort((a, b) => {
+   let pa = current === "Overall" ? points(a) : (tierPoints[a.tiers[current]] || 0)
+   let pb = current === "Overall" ? points(b) : (tierPoints[b.tiers[current]] || 0)
+   return pb - pa
+ }).forEach((p, i) => {
+   let tierHTML = ""
+   if (current === "Overall") {
+     for (let m in p.tiers) {
+       if (icons[m]) {
+         tierHTML += `<div class="tier ${p.tiers[m]}">
+           <img src="${icons[m]}" style="width:18px;height:18px;">
+           <div>${p.tiers[m]}</div>
+         </div>`
+       }
+     }
+   } else if (p.tiers[current]) {
+     tierHTML = `<div class="tier ${p.tiers[current]}">
+       <img src="${icons[current]}" style="width:18px;height:18px;">
+       <div>${p.tiers[current]}</div>
+     </div>`
+   }
+
+   const row = document.createElement("div")
+   row.className = "row " + (i === 0 ? "top1" : i === 1 ? "top2" : i === 2 ? "top3" : "")
+   row.innerHTML = `
+     <div class="rank">${i + 1}</div>
+     <img class="head" src="${skin(p.name)}">
+     <div class="name">${p.name}<div class="points">${points(p)} pts</div></div>
+     <div class="tiers">${tierHTML}</div>
+   `
+   row.onclick = () => openPlayerDetail(p)
+   list.appendChild(row)
+ })
+}
+
+function initApp() {
+ if (isInitialized) return
+ isInitialized = true
+ 
+ const tabsContainer = document.getElementById("tabs")
+ const listContainer = document.getElementById("list")
+ 
+ if (!tabsContainer || !listContainer) return
+ 
+ modes.forEach(m => {
+   const b = document.createElement("button")
+   b.innerHTML = (m === "Overall" ? "🏆" : `<img src="${icons[m]}" style="width:16px;height:16px;vertical-align:middle;">`) + " " + m
+   b.onclick = () => { 
+     current = m
+     render()
+     document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'))
+     b.classList.add('active')
+   }
+   if (m === "Overall") b.classList.add("active")
+   tabsContainer.appendChild(b)
+ })
+ 
+ render()
+}
+
+function startApp() {
+ document.getElementById("startscreen").style.display = "none"
+ const mainContent = document.getElementById("mainContent")
+ mainContent.classList.add("show")
+ initApp()
+}
+
+document.getElementById("startBtn").addEventListener("click", startApp)
+</script>
+
+</body>
+</html>
